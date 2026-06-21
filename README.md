@@ -1,13 +1,30 @@
 # Distributed Biometric Platform
 
-Distributed biometric enrollment and identification platform built with .NET and Clean Architecture.
-
+Distributed biometric enrollment and identification platform built with .NET, Clean Architecture, PostgreSQL, and event-driven processing.
 ## Architecture
+
+The solution follows Clean Architecture principles and is organized into the following layers:
 
 - Domain
 - Application
 - Infrastructure
 - API
+
+Current enrollment flow:
+
+Enrollment Request
+↓
+Enrollment Creation
+↓
+Biometric Sample Storage
+↓
+Enrollment Processing
+↓
+Subject Creation
+↓
+Template Creation
+↓
+Enrollment Completion
 
 ## Technologies
 
@@ -18,10 +35,13 @@ Distributed biometric enrollment and identification platform built with .NET and
 
 ## Current Features
 
-- Create Enrollment
-- Upload Biometric Sample
-- Store Biographic Data
-- Enrollment Workflow
+- Enrollment API
+- Biographic Data Management
+- Image Upload
+- Enrollment Processing
+- Subject Creation
+- Biometric Template Creation
+- Event-Driven Workflow
 
 ## Roadmap
 

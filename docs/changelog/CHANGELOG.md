@@ -10,15 +10,17 @@ Date: 2026-06-14
 
 ## Architecture
 
-* Created the DistributedBiometricPlatform solution
-* Implemented a Clean Architecture structure
-* Defined the following layers:
+Implemented:
 
-    * API
-    * Application
-    * Domain
-    * Infrastructure
-    * Contracts
+* DistributedBiometricPlatform solution
+* Clean Architecture structure
+* Layered architecture:
+
+  * API
+  * Application
+  * Domain
+  * Infrastructure
+  * Contracts
 
 ## Domain
 
@@ -65,7 +67,8 @@ Implemented:
 Implemented:
 
 * IMessageBus
-* ConsoleMessageBus
+* InMemoryMessageBus
+* EnrollmentRequestedMessage
 
 ## API
 
@@ -77,7 +80,7 @@ Implemented:
 
 ## Functional Flow
 
-End-to-end Enrollment workflow implemented:
+End-to-end enrollment workflow implemented:
 
 1. Receive enrollment request
 2. Create BiographicData
@@ -88,14 +91,88 @@ End-to-end Enrollment workflow implemented:
 7. Persist data to the database
 8. Publish EnrollmentRequested event
 
+---
+
+# v0.2.0 - Enrollment Processing
+
+Date: 2026-06-21
+
+## Enrollment Processing
+
+Implemented:
+
+* ProcessEnrollmentCommand
+* ProcessEnrollmentHandler
+* Enrollment processing workflow
+
+## Biometrics
+
+Implemented:
+
+* IBiometricEngine
+* FakeBiometricEngine
+* CreateSubjectResult
+
+## Subject Management
+
+Implemented:
+
+* Subject creation during enrollment processing
+* Subject linkage to Person
+
+## Template Management
+
+Implemented:
+
+* BiometricTemplate creation
+* Template persistence
+* Vector identifier storage
+
+## Status Management
+
+Implemented:
+
+Enrollment statuses:
+
+* Requested
+* Processing
+* Completed
+
+Person statuses:
+
+* PendingEnrollment
+* Enrolled
+
+## Messaging
+
+Implemented:
+
+* EnrollmentRequestedMessage
+* InMemoryMessageBus orchestration
+* Enrollment processing through message publishing
+
+## Functional Flow
+
+Enrollment workflow now executes end-to-end:
+
+1. Create enrollment request
+2. Store biometric sample
+3. Publish enrollment event
+4. Process enrollment
+5. Create subject
+6. Create biometric template
+7. Update quality score
+8. Mark person as enrolled
+9. Mark enrollment as completed
+
 ## Next Version
 
-### v0.2.0
+### v0.3.0
 
 Planned features:
 
-* FakeBiometricEngine
-* EnrollmentConsumer
-* CreateSubject workflow
-* Automatic Enrollment status updates
-* Automatic Person status updates
+* Wolverine integration
+* Command and message handling through Wolverine
+* Identification workflow
+* Candidate ranking
+* Enrollment failure handling

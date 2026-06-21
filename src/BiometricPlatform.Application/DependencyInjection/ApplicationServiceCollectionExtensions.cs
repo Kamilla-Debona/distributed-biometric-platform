@@ -1,4 +1,5 @@
 using BiometricPlatform.Application.Enrollments.CreateEnrollment;
+using BiometricPlatform.Application.Enrollments.ProcessEnrollment;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BiometricPlatform.Application.DependencyInjection;
@@ -9,6 +10,7 @@ public static class ApplicationServiceCollectionExtensions
         this IServiceCollection services)
     {
         services.AddScoped<CreateEnrollmentHandler>();
+        services.AddScoped<ProcessEnrollmentHandler>();
 
         return services;
     }

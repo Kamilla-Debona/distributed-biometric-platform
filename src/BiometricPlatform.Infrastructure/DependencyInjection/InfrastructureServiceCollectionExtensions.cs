@@ -1,3 +1,4 @@
+using BiometricPlatform.Application.Abstractions.Biometrics;
 using BiometricPlatform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using BiometricPlatform.Application.Abstractions.Persistence;
 using BiometricPlatform.Infrastructure.Persistence.Repositories;
 using BiometricPlatform.Application.Abstractions.Messaging;
 using BiometricPlatform.Application.Abstractions.Storage;
+using BiometricPlatform.Infrastructure.Biometrics;
 using BiometricPlatform.Infrastructure.Messaging;
 using BiometricPlatform.Infrastructure.Storage;
 
@@ -33,6 +35,10 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IBiometricSampleRepository, BiometricSampleRepository>();
         services.AddScoped<IObjectStorage, LocalObjectStorage>();
         services.AddScoped<IMessageBus, InMemoryMessageBus>();
+        services.AddScoped<ISubjectRepository, SubjectRepository>();
+        services.AddScoped<IBiometricTemplateRepository, BiometricTemplateRepository>();
+        services.AddScoped<IBiometricEngine, FakeBiometricEngine>();
+        
         return services;
     }
 }

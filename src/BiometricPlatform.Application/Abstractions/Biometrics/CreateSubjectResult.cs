@@ -1,6 +1,7 @@
 namespace BiometricPlatform.Application.Abstractions.Biometrics;
 
 public sealed record CreateSubjectResult(
-    Guid SubjectId,
+    string ExternalSubjectId,
+    string VectorId,
     decimal QualityScore,
-    byte[] Template);
+    string ModelVersion);

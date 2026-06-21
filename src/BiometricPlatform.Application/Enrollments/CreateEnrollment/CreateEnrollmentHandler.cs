@@ -8,35 +8,16 @@ using BiometricPlatform.Domain.Identity;
 
 namespace BiometricPlatform.Application.Enrollments.CreateEnrollment;
 
-public sealed class CreateEnrollmentHandler
+public sealed class CreateEnrollmentHandler(
+    IBiographicDataRepository biographicDataRepository,
+    IPersonRepository personRepository,
+    IEnrollmentRepository enrollmentRepository,
+    IBiometricSampleRepository biometricSampleRepository,
+    IObjectStorage objectStorage,
+    IMessageBus messageBus,
+    IUnitOfWork unitOfWork)
     : ICommandHandler<CreateEnrollmentCommand, CreateEnrollmentResponse>
 {
-    private readonly IBiographicDataRepository _biographicDataRepository;
-    private readonly IPersonRepository _personRepository;
-    private readonly IEnrollmentRepository _enrollmentRepository;
-    private readonly IBiometricSampleRepository _biometricSampleRepository;
-    private readonly IObjectStorage _objectStorage;
-    private readonly IMessageBus _messageBus;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public CreateEnrollmentHandler(
-        IBiographicDataRepository biographicDataRepository,
-        IPersonRepository personRepository,
-        IEnrollmentRepository enrollmentRepository,
-        IBiometricSampleRepository biometricSampleRepository,
-        IObjectStorage objectStorage,
-        IMessageBus messageBus,
-        IUnitOfWork unitOfWork)
-    {
-        _biographicDataRepository = biographicDataRepository;
-        _personRepository = personRepository;
-        _enrollmentRepository = enrollmentRepository;
-        _biometricSampleRepository = biometricSampleRepository;
-        _objectStorage = objectStorage;
-        _messageBus = messageBus;
-        _unitOfWork = unitOfWork;
-    }
-    
     public async Task<CreateEnrollmentResponse> Handle(
         CreateEnrollmentCommand command,
         CancellationToken cancellationToken)
@@ -53,7 +34,7 @@ public sealed class CreateEnrollmentHandler
             person.Id,
             command.GalleryId);
 
-        var storagePath = await _objectStorage.UploadAsync(
+        var storagePath = await objectStorage.UploadAsync(
             command.Image,
             $"{Guid.NewGuid()}.jpg",
             cancellationToken);
@@ -64,23 +45,23 @@ public sealed class CreateEnrollmentHandler
             BiometricSampleType.Face,
             storagePath);
 
-        await _biographicDataRepository.AddAsync(
+        await biographicDataRepository.AddAsync(
             biographicData,
             cancellationToken);
 
-        await _personRepository.AddAsync(
+        await personRepository.AddAsync(
             person,
             cancellationToken);
 
-        await _enrollmentRepository.AddAsync(
+        await enrollmentRepository.AddAsync(
             enrollment,
             cancellationToken);
 
-        await _biometricSampleRepository.AddAsync(
+        await biometricSampleRepository.AddAsync(
             biometricSample,
             cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         var enrollmentRequestedEvent = new EnrollmentRequestedMessage(
             enrollment.Id,
@@ -89,7 +70,7 @@ public sealed class CreateEnrollmentHandler
             biometricSample.Id,
             biometricSample.StoragePath);
 
-        await _messageBus.PublishAsync(
+        await messageBus.PublishAsync(
             enrollmentRequestedEvent,
             cancellationToken);
 

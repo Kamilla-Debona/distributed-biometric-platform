@@ -1,44 +1,23 @@
 using BiometricPlatform.Application.Abstractions.Biometrics;
-using BiometricPlatform.Application.Abstractions.Messaging;
 using BiometricPlatform.Application.Abstractions.Persistence;
 using BiometricPlatform.Domain.Biometrics;
 
 namespace BiometricPlatform.Application.Enrollments.ProcessEnrollment;
 
 public sealed class ProcessEnrollmentHandler
-    : ICommandHandler<ProcessEnrollmentCommand, bool>
 {
-    private readonly IEnrollmentRepository _enrollmentRepository;
-    private readonly IPersonRepository _personRepository;
-    private readonly IBiometricSampleRepository _biometricSampleRepository;
-    private readonly ISubjectRepository _subjectRepository;
-    private readonly IBiometricTemplateRepository _biometricTemplateRepository;
-    private readonly IBiometricEngine _biometricEngine;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ProcessEnrollmentHandler(
+    public async Task<bool> Handle(
+        ProcessEnrollmentCommand command,
         IEnrollmentRepository enrollmentRepository,
         IPersonRepository personRepository,
         IBiometricSampleRepository biometricSampleRepository,
         ISubjectRepository subjectRepository,
         IBiometricTemplateRepository biometricTemplateRepository,
         IBiometricEngine biometricEngine,
-        IUnitOfWork unitOfWork)
-    {
-        _enrollmentRepository = enrollmentRepository;
-        _personRepository = personRepository;
-        _biometricSampleRepository = biometricSampleRepository;
-        _subjectRepository = subjectRepository;
-        _biometricTemplateRepository = biometricTemplateRepository;
-        _biometricEngine = biometricEngine;
-        _unitOfWork = unitOfWork;
-    }
-
-    public async Task<bool> Handle(
-        ProcessEnrollmentCommand command,
+        IUnitOfWork unitOfWork,
         CancellationToken cancellationToken)
     {
-        var enrollment = await _enrollmentRepository.GetByIdAsync(
+        var enrollment = await enrollmentRepository.GetByIdAsync(
             command.EnrollmentId,
             cancellationToken);
 
@@ -46,7 +25,7 @@ public sealed class ProcessEnrollmentHandler
             throw new InvalidOperationException(
                 $"Enrollment {command.EnrollmentId} not found.");
 
-        var person = await _personRepository.GetByIdAsync(
+        var person = await personRepository.GetByIdAsync(
             enrollment.PersonId,
             cancellationToken);
 
@@ -54,10 +33,9 @@ public sealed class ProcessEnrollmentHandler
             throw new InvalidOperationException(
                 $"Person {enrollment.PersonId} not found.");
 
-        var biometricSample =
-            await _biometricSampleRepository.GetByEnrollmentIdAsync(
-                enrollment.Id,
-                cancellationToken);
+        var biometricSample = await biometricSampleRepository.GetByEnrollmentIdAsync(
+            enrollment.Id,
+            cancellationToken);
 
         if (biometricSample is null)
             throw new InvalidOperationException(
@@ -65,7 +43,7 @@ public sealed class ProcessEnrollmentHandler
 
         enrollment.MarkAsProcessing();
 
-        var result = await _biometricEngine.CreateSubjectAsync(
+        var result = await biometricEngine.CreateSubjectAsync(
             biometricSample.StoragePath,
             cancellationToken);
 
@@ -74,7 +52,7 @@ public sealed class ProcessEnrollmentHandler
             enrollment.GalleryId,
             result.ExternalSubjectId);
 
-        await _subjectRepository.AddAsync(
+        await subjectRepository.AddAsync(
             subject,
             cancellationToken);
 
@@ -84,7 +62,7 @@ public sealed class ProcessEnrollmentHandler
             result.VectorId,
             result.ModelVersion);
 
-        await _biometricTemplateRepository.AddAsync(
+        await biometricTemplateRepository.AddAsync(
             biometricTemplate,
             cancellationToken);
 
@@ -94,7 +72,7 @@ public sealed class ProcessEnrollmentHandler
 
         enrollment.Complete();
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return true;
     }

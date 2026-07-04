@@ -1,53 +1,43 @@
-using BiometricPlatform.Infrastructure.DependencyInjection;
+using BiometricPlatform.Application.Abstractions.Persistence;
 using BiometricPlatform.Application.DependencyInjection;
+using BiometricPlatform.Application.Enrollments.ProcessEnrollment;
+using BiometricPlatform.Infrastructure.DependencyInjection;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseWolverine(options =>
+{
+    options.UseRuntimeCompilation();
+
+    options.Discovery.IncludeAssembly(
+        typeof(ProcessEnrollmentHandler).Assembly);
+
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IEnrollmentRepository>();
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IPersonRepository>();
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IBiometricSampleRepository>();
+    options.CodeGeneration.AlwaysUseServiceLocationFor<ISubjectRepository>();
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IBiometricTemplateRepository>();
+    options.CodeGeneration.AlwaysUseServiceLocationFor<IUnitOfWork>();
+});
+
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddApplication();
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-/*var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");*/
-
 app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

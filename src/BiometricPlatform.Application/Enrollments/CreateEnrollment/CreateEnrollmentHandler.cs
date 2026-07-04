@@ -1,10 +1,11 @@
 using BiometricPlatform.Application.Abstractions.Messaging;
 using BiometricPlatform.Application.Abstractions.Persistence;
 using BiometricPlatform.Application.Abstractions.Storage;
-using BiometricPlatform.Application.Enrollments.Messages;
+using BiometricPlatform.Application.Enrollments.ProcessEnrollment;
 using BiometricPlatform.Domain.Biometrics;
 using BiometricPlatform.Domain.Enrollments;
 using BiometricPlatform.Domain.Identity;
+using Wolverine;
 
 namespace BiometricPlatform.Application.Enrollments.CreateEnrollment;
 
@@ -63,15 +64,11 @@ public sealed class CreateEnrollmentHandler(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var enrollmentRequestedEvent = new EnrollmentRequestedMessage(
-            enrollment.Id,
-            person.Id,
-            command.GalleryId,
-            biometricSample.Id,
-            biometricSample.StoragePath);
+        var processEnrollmentCommand = new ProcessEnrollmentCommand(
+            enrollment.Id);
 
-        await messageBus.PublishAsync(
-            enrollmentRequestedEvent,
+        await messageBus.InvokeAsync(
+            processEnrollmentCommand,
             cancellationToken);
 
         return new CreateEnrollmentResponse(

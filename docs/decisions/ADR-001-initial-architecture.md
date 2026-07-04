@@ -4,31 +4,80 @@
 
 Accepted
 
+---
+
 ## Context
 
-The platform requires clear separation between business rules, application workflows, infrastructure concerns, and external integrations.
+The Distributed Biometric Platform is intended to become a scalable, distributed biometric enrollment and identification system.
 
-Future integrations include:
+The platform must support:
 
-* Kafka
-* PostgreSQL
-* Object Storage
-* Biometric Engines
+- Multiple biometric engine providers
+- Event-driven workflows
+- Distributed processing
+- Pluggable infrastructure components
+- Independent evolution of business logic and technical implementations
+
+Current and planned integrations include:
+
+- PostgreSQL
+- Object Storage
+- Wolverine
+- Kafka
+- Vector Databases
+- External Biometric Engines
+
+These requirements demand a clear separation between business rules, application workflows, infrastructure concerns, and external technologies.
+
+---
 
 ## Decision
 
-Adopt Clean Architecture with the following layers:
+Adopt Clean Architecture as the foundational architecture of the platform.
 
-* Domain
-* Application
-* Infrastructure
-* API
+The solution is organized into the following layers:
+
+- Domain
+- Application
+- Infrastructure
+- API
+
+The dependency flow is inward:
+
+```text
+API
+    ↓
+Application
+    ↓
+Domain
+
+Infrastructure
+    ↑
+```
+
+The Domain layer contains only business concepts and must remain independent of frameworks and infrastructure.
+
+The Application layer orchestrates use cases through commands and handlers.
+
+The Infrastructure layer provides concrete implementations for persistence, messaging, storage, and external integrations.
+
+The API layer exposes the application through HTTP endpoints.
+
+---
 
 ## Consequences
 
-Benefits:
+### Benefits
 
-* Improved maintainability
-* Better testability
-* Easier replacement of infrastructure providers
-* Clear separation of concerns
+- Clear separation of concerns
+- Improved maintainability
+- High testability
+- Infrastructure can evolve independently from business logic
+- Easier replacement of messaging, storage, or biometric providers
+- Well-suited for distributed and event-driven architectures
+
+### Trade-offs
+
+- More projects and abstractions than a monolithic CRUD application
+- Additional upfront design effort
+- Higher architectural complexity in exchange for long-term flexibility

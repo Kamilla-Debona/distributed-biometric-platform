@@ -66,9 +66,8 @@ Implemented:
 
 Implemented:
 
-* IMessageBus
+* Initial messaging abstraction
 * InMemoryMessageBus
-* EnrollmentRequestedMessage
 
 ## API
 
@@ -89,7 +88,7 @@ End-to-end enrollment workflow implemented:
 5. Store biometric image
 6. Create BiometricSample
 7. Persist data to the database
-8. Publish EnrollmentRequested event
+8. Prepare the enrollment for asynchronous processing
 
 ---
 
@@ -147,9 +146,9 @@ Person statuses:
 
 Implemented:
 
-* EnrollmentRequestedMessage
 * InMemoryMessageBus orchestration
-* Enrollment processing through message publishing
+* ProcessEnrollmentCommand
+* Enrollment processing through command dispatching
 
 ## Functional Flow
 
@@ -165,14 +164,52 @@ Enrollment workflow now executes end-to-end:
 8. Mark person as enrolled
 9. Mark enrollment as completed
 
+
+---
+
+# v0.3.0 - Wolverine Messaging
+
+Date: 2026-07-04
+
+## Messaging
+
+Implemented:
+
+* Replaced the custom messaging abstraction with Wolverine
+* Removed the custom IMessageBus abstraction
+* Removed the InMemoryMessageBus implementation
+* Direct command dispatch through Wolverine
+* In-process command handling
+
+## Application
+
+Implemented:
+
+* Refactored CreateEnrollmentHandler to dispatch ProcessEnrollmentCommand through Wolverine
+* Simplified messaging infrastructure
+* Removed intermediate messaging components
+
+## Functional Flow
+
+Enrollment workflow now executes through Wolverine:
+
+1. Create enrollment request
+2. Persist enrollment data
+3. Dispatch ProcessEnrollmentCommand through Wolverine
+4. Execute ProcessEnrollmentHandler
+5. Create Subject
+6. Create BiometricTemplate
+7. Update biometric quality score
+8. Mark Person as Enrolled
+9. Mark Enrollment as Completed
+
 ## Next Version
 
-### v0.3.0
+### v0.4.0
 
 Planned features:
 
-* Wolverine integration
-* Command and message handling through Wolverine
 * Identification workflow
 * Candidate ranking
 * Enrollment failure handling
+* Kafka integration

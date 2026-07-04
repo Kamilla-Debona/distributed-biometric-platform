@@ -19,14 +19,16 @@
 * [x] Biometric Template Creation
 * [x] Enrollment Completion
 * [x] Person Enrollment Status Update
-* [x] InMemoryMessageBus
+* [x] Initial InMemoryMessageBus
 
 ## v0.3.0 - Messaging Infrastructure
 
-* [ ] Wolverine Integration
-* [ ] Message Bus Migration
-* [ ] Command Handling through Wolverine
-* [ ] Message Handling through Wolverine
+* [x] Wolverine Integration
+* [x] Message Bus Migration
+* [x] Direct Command Dispatch through Wolverine
+* [x] ProcessEnrollmentCommand Handling
+* [x] Remove Custom Message Bus Abstraction
+* [x] Remove InMemoryMessageBus
 * [ ] Enrollment Failure Handling
 * [ ] Background Processing
 
@@ -38,6 +40,7 @@
 * [ ] Candidate Ranking
 * [ ] Score Calculation
 * [ ] Top-K Candidate Selection
+* [ ] Identification Engine Abstraction
 
 ## v0.5.0 - Distributed Processing
 
@@ -45,6 +48,7 @@
 * [ ] Kafka Producers
 * [ ] Kafka Consumers
 * [ ] Worker Services
+* [ ] Durable Messaging
 * [ ] Distributed Processing
 
 ## v0.6.0 - Vector Search
@@ -59,7 +63,7 @@
 
 * [ ] Enrollment Workflow
 * [ ] Identification Workflow
-* [ ] Event-Driven Architecture
+* [x] Event-Driven Architecture
 * [ ] Distributed Processing
 * [ ] Automated Tests
 * [ ] Documentation

@@ -2,7 +2,9 @@ using BiometricPlatform.Application.Abstractions.Biometrics;
 
 namespace BiometricPlatform.Infrastructure.Biometrics;
 
-public sealed class FakeBiometricEngine : IBiometricEngine
+public sealed class FakeBiometricEngine(
+    IBiometricSubjectCatalog subjectCatalog)
+    : IBiometricEngine
 {
     public Task<CreateSubjectResult> CreateSubjectAsync(
         string imagePath,
@@ -17,27 +19,28 @@ public sealed class FakeBiometricEngine : IBiometricEngine
         return Task.FromResult(result);
     }
 
-    public Task<SearchResult> SearchAsync(
+    public async Task<SearchResult> SearchAsync(
         string imagePath,
         Guid galleryId,
         CancellationToken cancellationToken)
     {
-        var candidates = new List<SearchCandidate>
-        {
-            new(
-                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
-                Score: 98.75m),
-            new(
-                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
-                Score: 93.40m),
-            new(
-                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
-                Score: 87.20m)
-        };
+        var subjects = await subjectCatalog.GetSubjectsByGalleryIdAsync(
+            galleryId,
+            cancellationToken);
 
-        var result = new SearchResult(candidates);
+        var candidates = subjects
+            .Take(3)
+            .Select((subject, index) => new SearchCandidate(
+                subject.ExternalSubjectId,
+                Score: index switch
+                {
+                    0 => 98.75m,
+                    1 => 93.40m,
+                    _ => 87.20m
+                }))
+            .ToList();
 
-        return Task.FromResult(result);
+        return new SearchResult(candidates);
     }
 
     public Task DeleteSubjectAsync(

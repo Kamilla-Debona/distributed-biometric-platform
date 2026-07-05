@@ -1,4 +1,3 @@
-using BiometricPlatform.Application.Abstractions.Messaging;
 using BiometricPlatform.Application.Abstractions.Persistence;
 using BiometricPlatform.Application.Abstractions.Storage;
 using BiometricPlatform.Application.Identifications.ProcessIdentification;
@@ -33,7 +32,6 @@ public sealed class CreateIdentificationHandler(
             cancellationToken);
 
         var identification = new Identification(
-            command.ClientId,
             command.GalleryId,
             probeSample.Id);
 

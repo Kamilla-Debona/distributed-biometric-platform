@@ -16,10 +16,6 @@ public sealed class IdentificationConfiguration
         builder.Property(identification => identification.Id)
             .HasColumnName("id");
 
-        builder.Property(identification => identification.ClientId)
-            .HasColumnName("client_id")
-            .IsRequired();
-
         builder.Property(identification => identification.GalleryId)
             .HasColumnName("gallery_id")
             .IsRequired();

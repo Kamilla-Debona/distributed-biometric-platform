@@ -9,18 +9,14 @@ public sealed class Identification : AggregateRoot
     }
 
     public Identification(
-        Guid clientId,
         Guid galleryId,
         Guid probeSampleId)
     {
-        ClientId = clientId;
         GalleryId = galleryId;
         ProbeSampleId = probeSampleId;
         Status = IdentificationStatus.Requested;
     }
-
-    public Guid ClientId { get; private set; }
-
+    
     public Guid GalleryId { get; private set; }
 
     public Guid ProbeSampleId { get; private set; }

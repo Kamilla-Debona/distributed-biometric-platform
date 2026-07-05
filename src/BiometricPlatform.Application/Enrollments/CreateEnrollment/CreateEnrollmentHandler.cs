@@ -40,7 +40,7 @@ public sealed class CreateEnrollmentHandler(
             $"{Guid.NewGuid()}.jpg",
             cancellationToken);
 
-        var biometricSample = new BiometricSample(
+        var biometricSample = BiometricSample.CreateEnrollmentSample(
             person.Id,
             enrollment.Id,
             BiometricSampleType.Face,

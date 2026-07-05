@@ -1,5 +1,3 @@
-using BiometricPlatform.Domain.Common;
-
 namespace BiometricPlatform.Domain.Identifications;
 
 public sealed class IdentificationCandidate : Entity

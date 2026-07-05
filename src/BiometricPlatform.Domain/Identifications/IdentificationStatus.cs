@@ -8,3 +8,4 @@ public enum IdentificationStatus
     NoMatch = 4,
     Failed = 5
 }
+

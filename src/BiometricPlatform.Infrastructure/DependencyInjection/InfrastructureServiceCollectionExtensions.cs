@@ -35,6 +35,8 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<ISubjectRepository, SubjectRepository>();
         services.AddScoped<IBiometricTemplateRepository, BiometricTemplateRepository>();
         services.AddScoped<IBiometricEngine, FakeBiometricEngine>();
+        services.AddScoped<IIdentificationRepository, IdentificationRepository>();
+        services.AddScoped<IIdentificationCandidateRepository, IdentificationCandidateRepository>();
         
         return services;
     }

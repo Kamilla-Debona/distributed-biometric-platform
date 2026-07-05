@@ -8,7 +8,10 @@ public sealed class Identification : AggregateRoot
     {
     }
 
-    public Identification(Guid clientId, Guid galleryId, Guid probeSampleId)
+    public Identification(
+        Guid clientId,
+        Guid galleryId,
+        Guid probeSampleId)
     {
         ClientId = clientId;
         GalleryId = galleryId;
@@ -23,6 +26,8 @@ public sealed class Identification : AggregateRoot
     public Guid ProbeSampleId { get; private set; }
 
     public IdentificationStatus Status { get; private set; }
+
+    public string? FailureReason { get; private set; }
 
     public DateTime? CompletedAtUtc { get; private set; }
 
@@ -43,9 +48,10 @@ public sealed class Identification : AggregateRoot
         CompletedAtUtc = DateTime.UtcNow;
     }
 
-    public void Fail()
+    public void Fail(string reason)
     {
         Status = IdentificationStatus.Failed;
+        FailureReason = reason;
         CompletedAtUtc = DateTime.UtcNow;
     }
 }

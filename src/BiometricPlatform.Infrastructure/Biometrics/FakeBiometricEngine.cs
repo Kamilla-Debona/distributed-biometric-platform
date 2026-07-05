@@ -16,4 +16,34 @@ public sealed class FakeBiometricEngine : IBiometricEngine
 
         return Task.FromResult(result);
     }
+
+    public Task<SearchResult> SearchAsync(
+        string imagePath,
+        Guid galleryId,
+        CancellationToken cancellationToken)
+    {
+        var candidates = new List<SearchCandidate>
+        {
+            new(
+                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
+                Score: 98.75m),
+            new(
+                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
+                Score: 93.40m),
+            new(
+                ExternalSubjectId: $"subject-{Guid.NewGuid()}",
+                Score: 87.20m)
+        };
+
+        var result = new SearchResult(candidates);
+
+        return Task.FromResult(result);
+    }
+
+    public Task DeleteSubjectAsync(
+        string externalSubjectId,
+        CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 }

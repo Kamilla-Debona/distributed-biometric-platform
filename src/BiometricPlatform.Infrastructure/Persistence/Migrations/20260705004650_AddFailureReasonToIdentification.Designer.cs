@@ -3,6 +3,7 @@ using System;
 using BiometricPlatform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BiometricPlatform.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BiometricPlatformDbContext))]
-    partial class BiometricPlatformDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705004650_AddFailureReasonToIdentification")]
+    partial class AddFailureReasonToIdentification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,11 +36,11 @@ namespace BiometricPlatform.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at_utc");
 
-                    b.Property<Guid?>("EnrollmentId")
+                    b.Property<Guid>("EnrollmentId")
                         .HasColumnType("uuid")
                         .HasColumnName("enrollment_id");
 
-                    b.Property<Guid?>("PersonId")
+                    b.Property<Guid>("PersonId")
                         .HasColumnType("uuid")
                         .HasColumnName("person_id");
 

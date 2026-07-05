@@ -29,8 +29,8 @@
 * [x] ProcessEnrollmentCommand Handling
 * [x] Remove Custom Message Bus Abstraction
 * [x] Remove InMemoryMessageBus
-* [ ] Enrollment Failure Handling
-* [ ] Background Processing
+* [x] Enrollment Failure Handling
+* [x] Background Processing
 
 ## v0.4.0 - Identification Workflow
 
@@ -52,19 +52,24 @@
 * [x] IdentificationCandidate Persistence
 * [x] Candidate Ranking
 
-## v0.5.0 - Identification Enhancements
+## v0.5.0 - Identification Query
 
-* [ ] GET /api/identifications/{id}
-* [ ] Identification Result Endpoint
-* [ ] Candidate Result Endpoint
-* [ ] Configurable Identification Thresholds
-* [ ] Candidate Filtering Rules
-* [ ] Top-K Candidate Selection
-* [ ] Score Calculation Refinement
+* [x] GET /api/identifications/{id}
+* [x] Identification Result Endpoint
+* [x] Candidate Result Endpoint
+* [x] Ranked Candidate Response
+* [x] Completed / NoMatch / Failed States
+
+## v0.6.0 - Enrollment Lifecycle
+
+* [ ] Delete Enrollment API
+* [ ] Delete Subject from Biometric Engine
+* [ ] Delete Biometric Templates
+* [ ] Delete Stored Images
 * [ ] Enrollment Retry Handling
 * [ ] Identification Retry Handling
 
-## v0.6.0 - Distributed Processing
+## v0.7.0 - Distributed Processing
 
 * [ ] Kafka Integration
 * [ ] Kafka Producers
@@ -73,7 +78,7 @@
 * [ ] Durable Messaging
 * [ ] Distributed Processing
 
-## v0.7.0 - Vector Search
+## v0.8.0 - Vector Search
 
 * [ ] Vector Database Integration
 * [ ] Qdrant or PGVector
@@ -83,7 +88,7 @@
 
 ## v1.0.0 - Distributed Biometric Platform MVP
 
-* [ ] Enrollment Workflow
+* [x] Enrollment Workflow
 * [x] Identification Workflow
 * [x] Event-Driven Architecture
 * [ ] Distributed Processing

@@ -253,6 +253,10 @@ Implemented:
 * CreateIdentificationCommand
 * CreateIdentificationHandler
 * CreateIdentificationResponse
+* GET /api/identifications/{id} endpoint
+* GetIdentificationQuery
+* GetIdentificationHandler
+* GetIdentificationResponse
 
 ## Identification Processing
 
@@ -264,20 +268,22 @@ Implemented:
 * IdentificationCandidate persistence
 * Identification completion with candidates
 * Identification completion with no match
+* Identification failure handling
+* Candidate ranking persistence
+* Person resolution from Subject
 
 ## Functional Flow
-
-End-to-end identification workflow implemented:
 
 1. Receive identification request
 2. Store probe biometric sample
 3. Create Identification
-4. Persist data to the database
+4. Persist data
 5. Dispatch ProcessIdentificationCommand through Wolverine
 6. Execute biometric search
-7. Resolve external subject identifiers
-8. Create IdentificationCandidate records
-9. Mark Identification as Completed or NoMatch
+7. Resolve Subjects from external identifiers
+8. Resolve Persons from Subjects
+9. Persist ranked IdentificationCandidates
+10. Mark Identification as Completed, NoMatch or Failed
 
 ---
 
@@ -287,8 +293,10 @@ End-to-end identification workflow implemented:
 
 Planned features:
 
-* Identification result endpoint
-* Candidate result endpoint
-* Configurable identification thresholds
+* Delete enrollment workflow
+* Delete subject from biometric engine
 * Enrollment retry handling
 * Identification retry handling
+* Configurable identification thresholds
+* Pagination for identification candidates
+* Audit logging

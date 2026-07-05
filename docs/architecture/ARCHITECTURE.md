@@ -109,9 +109,32 @@ Contains:
 6. A `ProcessIdentificationCommand` is dispatched through Wolverine.
 7. `ProcessIdentificationHandler` executes the identification workflow.
 8. The biometric engine searches the selected gallery.
-9. External subject identifiers are mapped back to platform Subjects.
-10. `IdentificationCandidate` records are created.
-11. The `Identification` is marked as **Completed** or **NoMatch**.
+9. External subject identifiers are mapped back to platform `Subject` entities.
+10. Each `Subject` is resolved to its corresponding `Person`.
+11. Ranked `IdentificationCandidate` records are persisted.
+12. The `Identification` aggregate is updated as:
+    - `Completed` when candidates are found;
+    - `NoMatch` when no candidates satisfy the search;
+    - `Failed` when an unexpected error occurs.
+
+---
+
+## Identification Query
+
+The platform exposes an identification query endpoint that allows clients to retrieve the complete result of a previously submitted identification.
+
+The query returns:
+
+- Identification metadata
+- Processing status
+- Failure reason, when applicable
+- Ranked candidate list
+- Person identifier
+- Subject identifier
+- Matching score
+- Candidate rank
+
+This endpoint reads persisted data only and never invokes the biometric engine.
 
 ---
 
@@ -125,7 +148,9 @@ Current operations include:
 - Candidate search
 - Subject deletion
 
-The current implementation is a fake biometric engine used for development and architectural validation. It produces deterministic results that allow both enrollment and identification workflows to be validated without requiring a commercial biometric SDK.
+The current implementation is a fake biometric engine used for development and architectural validation.
+
+The fake engine produces deterministic search results using enrolled platform subjects, allowing the complete enrollment and identification workflows to be exercised without requiring a commercial biometric SDK.
 
 Future implementations may integrate commercial biometric SDKs or external biometric providers while preserving the application workflow.
 
@@ -145,6 +170,8 @@ Planned architectural improvements include:
 
 - Configurable identification thresholds
 - Candidate filtering and quality rules
+- Identification pagination
+- Identification history endpoints
 - Enrollment retry policies
 - Identification retry policies
 - Background workers

@@ -78,14 +78,19 @@ The platform currently uses:
 
 Current application workflows:
 
-- Enrollment workflow
-- Identification workflow
+- Asynchronous Enrollment workflow
+- Asynchronous Identification workflow
+- Identification query workflow (GET by id)
 
 The biometric engine is exposed through application-level abstractions. This keeps the domain and application workflows independent from a specific biometric SDK or vendor.
 
 Identification uses probe-compatible biometric samples because an identification probe does not belong to a known person before matching.
 
 Identification processing creates ranked IdentificationCandidate records by resolving external biometric subject identifiers back to platform Subjects.
+
+Both Enrollment and Identification are executed asynchronously through Wolverine command dispatching. HTTP requests only create the workflow and persist the initial state. Background handlers complete the biometric processing.
+
+Identification results are persisted and can be retrieved through a dedicated query endpoint. Clients are expected to poll the resource until processing reaches a terminal state.
 
 ---
 
@@ -99,6 +104,8 @@ Identification processing creates ranked IdentificationCandidate records by reso
 - Infrastructure can evolve independently from business logic
 - Easier replacement of messaging, storage, or biometric providers
 - Well-suited for distributed and event-driven architectures
+- Supports asynchronous processing through message dispatching
+- Read and write responsibilities are separated for long-running workflows
 - Enrollment and identification workflows can evolve independently
 - Biometric providers can be replaced without changing application workflows
 
@@ -108,3 +115,5 @@ Identification processing creates ranked IdentificationCandidate records by reso
 - Additional upfront design effort
 - Higher architectural complexity in exchange for long-term flexibility
 - Rich domain modeling is required for biometric concepts such as subjects, templates, probe samples, identification candidates, and ranking
+- Clients must handle eventual consistency for asynchronous workflows
+- Additional complexity is introduced by background processing and workflow state transitions

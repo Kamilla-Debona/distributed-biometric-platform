@@ -2,16 +2,19 @@
 
 ## Overview
 
-Distributed Biometric Platform is a distributed biometric enrollment and identification system built with .NET using Clean Architecture and message-driven workflows.
+Distributed Biometric Platform is a distributed biometric enrollment and identification platform built with .NET using Clean Architecture and asynchronous message-driven workflows.
 
-The platform is designed to support:
+The platform is designed to support scalable biometric processing through pluggable storage, messaging, and biometric engine providers.
+
+The platform currently supports:
 
 - Biometric enrollment
 - Biometric identification
 - Distributed processing
 - Multiple biometric engines
 - Event-driven workflows
-- Pluggable messaging and storage providers
+- Pluggable messaging providers
+- Pluggable object storage providers
 
 ---
 
@@ -21,6 +24,7 @@ The platform is designed to support:
 src/
 ├── BiometricPlatform.Api
 ├── BiometricPlatform.Application
+├── BiometricPlatform.Contracts
 ├── BiometricPlatform.Domain
 └── BiometricPlatform.Infrastructure
 ```
@@ -46,10 +50,12 @@ The Domain layer is framework-independent and contains only business logic.
 Contains:
 
 - Commands
-- Handlers
+- Command handlers
 - Application services
 - Repository abstractions
-- Enrollment and identification workflows
+- Enrollment workflows
+- Identification workflows
+- Message-driven orchestration
 - Biometric engine abstractions
 
 The Application layer orchestrates use cases without depending on Infrastructure implementations.
@@ -61,7 +67,7 @@ Contains:
 - Entity Framework Core persistence
 - PostgreSQL integration
 - Local object storage
-- Wolverine messaging
+- Wolverine in-process messaging
 - Fake biometric engine
 - External integrations
 
@@ -81,43 +87,31 @@ Contains:
 1. Client sends an enrollment request.
 2. API creates the Enrollment, Person and BiographicData.
 3. The biometric image is uploaded to object storage.
-4. A BiometricSample is created and persisted as an enrollment sample.
+4. A BiometricSample is created and persisted.
 5. The Enrollment is committed to the database.
-6. A `ProcessEnrollmentCommand` is sent through Wolverine.
+6. A `ProcessEnrollmentCommand` is dispatched through Wolverine.
 7. `ProcessEnrollmentHandler` executes the enrollment workflow.
-8. The biometric engine creates a Subject.
-9. A BiometricTemplate is created.
-10. The Person is marked as **Enrolled**.
-11. The Enrollment is marked as **Completed**.
+8. The biometric engine creates an external biometric subject.
+9. A platform Subject is created and linked to the external subject.
+10. A BiometricTemplate is created.
+11. The Person aggregate is marked as **Enrolled**.
+12. The Enrollment is marked as **Completed**.
 
 ---
 
-## Identification Processing Foundation
+## Current Identification Flow
 
-The platform now has the foundation for biometric identification processing.
-
-Current identification-related capabilities include:
-
-- Probe-compatible BiometricSample model
-- Identification aggregate
-- IdentificationCandidate entity
-- Identification repositories
-- ProcessIdentificationCommand
-- ProcessIdentificationHandler
-- Biometric engine search contracts
-
-The identification workflow is being prepared to support:
-
-1. Client sends an identification request.
-2. API stores the probe image as a probe sample.
-3. An Identification record is created.
-4. A `ProcessIdentificationCommand` is dispatched through Wolverine.
-5. The biometric engine searches candidates in the selected gallery.
-6. External subject identifiers are mapped back to platform Subjects.
-7. IdentificationCandidate records are created.
-8. The Identification is completed with candidates or completed with no match.
-
-The Identification API is planned as the next step.
+1. Client submits an identification request.
+2. The probe image is uploaded to object storage.
+3. A probe `BiometricSample` is created.
+4. An `Identification` aggregate is persisted.
+5. The transaction is committed.
+6. A `ProcessIdentificationCommand` is dispatched through Wolverine.
+7. `ProcessIdentificationHandler` executes the identification workflow.
+8. The biometric engine searches the selected gallery.
+9. External subject identifiers are mapped back to platform Subjects.
+10. `IdentificationCandidate` records are created.
+11. The `Identification` is marked as **Completed** or **NoMatch**.
 
 ---
 
@@ -127,11 +121,13 @@ The biometric engine is abstracted through application contracts.
 
 Current operations include:
 
-- Create subject
-- Search candidates
-- Delete subject
+- Subject creation
+- Candidate search
+- Subject deletion
 
-The current implementation is a fake engine used for development and architectural validation. Future implementations may integrate real biometric SDKs or external providers.
+The current implementation is a fake biometric engine used for development and architectural validation. It produces deterministic results that allow both enrollment and identification workflows to be validated without requiring a commercial biometric SDK.
+
+Future implementations may integrate commercial biometric SDKs or external biometric providers while preserving the application workflow.
 
 ---
 
@@ -139,7 +135,7 @@ The current implementation is a fake engine used for development and architectur
 
 The platform currently uses Wolverine for in-process command dispatching.
 
-This architecture allows the messaging infrastructure to evolve to external brokers such as Kafka without changing the application workflow.
+Enrollment and identification processing are executed asynchronously through message handlers, allowing the messaging infrastructure to evolve to external brokers such as Kafka without changing the application layer.
 
 ---
 
@@ -147,12 +143,14 @@ This architecture allows the messaging infrastructure to evolve to external brok
 
 Planned architectural improvements include:
 
-- Identification API
-- Candidate ranking
-- Enrollment failure handling
-- Kafka integration
+- Configurable identification thresholds
+- Candidate filtering and quality rules
+- Enrollment retry policies
+- Identification retry policies
 - Background workers
+- Kafka integration
 - Distributed message processing
-- Vector database integration
 - Multiple biometric engine providers
-- Scalable identification workflow
+- Real biometric SDK integration
+- Vector database integration
+- Horizontal scaling

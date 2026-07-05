@@ -32,7 +32,7 @@
 * [ ] Enrollment Failure Handling
 * [ ] Background Processing
 
-## v0.4.0 - Identification Processing Foundation
+## v0.4.0 - Identification Workflow
 
 * [x] Probe-compatible BiometricSample
 * [x] Identification Repository
@@ -43,20 +43,26 @@
 * [x] Subject Lookup by GalleryId
 * [x] ProcessIdentificationCommand
 * [x] ProcessIdentificationHandler
-* [x] Candidate Mapping Foundation
+* [x] Identification API
+* [x] CreateIdentificationCommand
+* [x] CreateIdentificationHandler
+* [x] CreateIdentificationResponse
+* [x] POST /api/identifications
+* [x] End-to-End Identification Workflow
+* [x] IdentificationCandidate Persistence
+* [x] Candidate Ranking
 
-## v0.5.0 - Identification API
+## v0.5.0 - Identification Enhancements
 
-* [ ] Identification API
-* [ ] CreateIdentificationCommand
-* [ ] CreateIdentificationHandler
-* [ ] CreateIdentificationResponse
-* [ ] Identification Request Endpoint
+* [ ] GET /api/identifications/{id}
+* [ ] Identification Result Endpoint
 * [ ] Candidate Result Endpoint
-* [ ] End-to-End Identification Flow
-* [ ] Candidate Ranking Validation
-* [ ] Score Calculation Refinement
+* [ ] Configurable Identification Thresholds
+* [ ] Candidate Filtering Rules
 * [ ] Top-K Candidate Selection
+* [ ] Score Calculation Refinement
+* [ ] Enrollment Retry Handling
+* [ ] Identification Retry Handling
 
 ## v0.6.0 - Distributed Processing
 
@@ -78,7 +84,7 @@
 ## v1.0.0 - Distributed Biometric Platform MVP
 
 * [ ] Enrollment Workflow
-* [ ] Identification Workflow
+* [x] Identification Workflow
 * [x] Event-Driven Architecture
 * [ ] Distributed Processing
 * [ ] Automated Tests

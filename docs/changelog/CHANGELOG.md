@@ -205,7 +205,7 @@ Enrollment workflow now executes through Wolverine:
 
 ---
 
-# v0.4.0 - Identification Processing Foundation
+# v0.4.0 - Identification Workflow
 
 Date: 2026-07-05
 
@@ -214,6 +214,7 @@ Date: 2026-07-05
 Implemented:
 
 * Probe-compatible BiometricSample model
+* Identification aggregate refinements
 * Identification status updates
 * Identification failure reason support
 * IdentificationCandidate ranking model
@@ -227,6 +228,7 @@ Implemented:
 * SearchAsync contract
 * DeleteSubjectAsync contract
 * FakeBiometricEngine search support
+* Biometric subject catalog abstraction
 
 ## Persistence
 
@@ -241,6 +243,17 @@ Implemented:
 * BiometricSample lookup by id
 * Database migration for probe-compatible samples
 
+## API
+
+Implemented:
+
+* IdentificationsController
+* POST /api/identifications endpoint
+* CreateIdentificationRequest
+* CreateIdentificationCommand
+* CreateIdentificationHandler
+* CreateIdentificationResponse
+
 ## Identification Processing
 
 Implemented:
@@ -248,19 +261,25 @@ Implemented:
 * ProcessIdentificationCommand
 * ProcessIdentificationHandler
 * Candidate mapping from biometric engine results to platform Subjects
+* IdentificationCandidate persistence
 * Identification completion with candidates
 * Identification completion with no match
 
 ## Functional Flow
 
-Identification processing foundation now supports:
+End-to-end identification workflow implemented:
 
-1. Load Identification
-2. Load probe BiometricSample
-3. Execute biometric search
-4. Resolve returned external subject identifiers
-5. Create IdentificationCandidate records
-6. Mark Identification as Completed or NoMatch
+1. Receive identification request
+2. Store probe biometric sample
+3. Create Identification
+4. Persist data to the database
+5. Dispatch ProcessIdentificationCommand through Wolverine
+6. Execute biometric search
+7. Resolve external subject identifiers
+8. Create IdentificationCandidate records
+9. Mark Identification as Completed or NoMatch
+
+---
 
 ## Next Version
 
@@ -268,8 +287,8 @@ Identification processing foundation now supports:
 
 Planned features:
 
-* Identification API
-* CreateIdentification workflow
-* End-to-end identification request flow
+* Identification result endpoint
 * Candidate result endpoint
-* Enrollment failure handling
+* Configurable identification thresholds
+* Enrollment retry handling
+* Identification retry handling

@@ -12,3 +12,4 @@ public interface IIdentificationRepository
         Guid id,
         CancellationToken cancellationToken);
 }
+

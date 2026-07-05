@@ -1,5 +1,6 @@
 using BiometricPlatform.Api.Models;
 using BiometricPlatform.Application.Identifications.CreateIdentification;
+using BiometricPlatform.Application.Identifications.GetIdentification;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BiometricPlatform.Api.Controllers;
@@ -8,11 +9,15 @@ namespace BiometricPlatform.Api.Controllers;
 [Route("api/identifications")]
 public sealed class IdentificationsController : ControllerBase
 {
-    private readonly CreateIdentificationHandler _handler;
+    private readonly CreateIdentificationHandler _createHandler;
+    private readonly GetIdentificationHandler _getHandler;
 
-    public IdentificationsController(CreateIdentificationHandler handler)
+    public IdentificationsController(
+        CreateIdentificationHandler createHandler,
+        GetIdentificationHandler getHandler)
     {
-        _handler = handler;
+        _createHandler = createHandler;
+        _getHandler = getHandler;
     }
 
     [HttpPost]
@@ -26,10 +31,25 @@ public sealed class IdentificationsController : ControllerBase
             request.GalleryId,
             imageStream);
 
-        var response = await _handler.Handle(
+        var response = await _createHandler.Handle(
             command,
             cancellationToken);
 
         return Accepted(response);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<GetIdentificationResponse>> GetById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var response = await _getHandler.Handle(
+            new GetIdentificationQuery(id),
+            cancellationToken);
+
+        if (response is null)
+            return NotFound();
+
+        return Ok(response);
     }
 }

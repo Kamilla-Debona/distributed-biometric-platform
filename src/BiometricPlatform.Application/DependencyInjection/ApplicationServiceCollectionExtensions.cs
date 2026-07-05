@@ -1,6 +1,7 @@
 using BiometricPlatform.Application.Enrollments.CreateEnrollment;
 using BiometricPlatform.Application.Enrollments.ProcessEnrollment;
 using BiometricPlatform.Application.Identifications.CreateIdentification;
+using BiometricPlatform.Application.Identifications.GetIdentification;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BiometricPlatform.Application.DependencyInjection;
@@ -13,6 +14,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<CreateEnrollmentHandler>();
         services.AddScoped<ProcessEnrollmentHandler>();
         services.AddScoped<CreateIdentificationHandler>();
+        services.AddScoped<GetIdentificationHandler>();
         
 
         return services;

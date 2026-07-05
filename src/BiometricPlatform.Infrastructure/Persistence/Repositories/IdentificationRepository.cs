@@ -24,4 +24,5 @@ public sealed class IdentificationRepository(BiometricPlatformDbContext dbContex
                 identification => identification.Id == id,
                 cancellationToken);
     }
+
 }

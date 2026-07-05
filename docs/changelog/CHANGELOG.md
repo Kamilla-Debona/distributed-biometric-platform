@@ -203,13 +203,73 @@ Enrollment workflow now executes through Wolverine:
 8. Mark Person as Enrolled
 9. Mark Enrollment as Completed
 
+---
+
+# v0.4.0 - Identification Processing Foundation
+
+Date: 2026-07-05
+
+## Domain
+
+Implemented:
+
+* Probe-compatible BiometricSample model
+* Identification status updates
+* Identification failure reason support
+* IdentificationCandidate ranking model
+
+## Biometrics
+
+Implemented:
+
+* SearchCandidate
+* SearchResult
+* SearchAsync contract
+* DeleteSubjectAsync contract
+* FakeBiometricEngine search support
+
+## Persistence
+
+Implemented:
+
+* IIdentificationRepository
+* IdentificationRepository
+* IIdentificationCandidateRepository
+* IdentificationCandidateRepository
+* Subject lookup by external subject id
+* Subject lookup by gallery id
+* BiometricSample lookup by id
+* Database migration for probe-compatible samples
+
+## Identification Processing
+
+Implemented:
+
+* ProcessIdentificationCommand
+* ProcessIdentificationHandler
+* Candidate mapping from biometric engine results to platform Subjects
+* Identification completion with candidates
+* Identification completion with no match
+
+## Functional Flow
+
+Identification processing foundation now supports:
+
+1. Load Identification
+2. Load probe BiometricSample
+3. Execute biometric search
+4. Resolve returned external subject identifiers
+5. Create IdentificationCandidate records
+6. Mark Identification as Completed or NoMatch
+
 ## Next Version
 
-### v0.4.0
+### v0.5.0
 
 Planned features:
 
-* Identification workflow
-* Candidate ranking
+* Identification API
+* CreateIdentification workflow
+* End-to-end identification request flow
+* Candidate result endpoint
 * Enrollment failure handling
-* Kafka integration

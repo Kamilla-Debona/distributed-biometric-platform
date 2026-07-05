@@ -32,17 +32,33 @@
 * [ ] Enrollment Failure Handling
 * [ ] Background Processing
 
-## v0.4.0 - Identification
+## v0.4.0 - Identification Processing Foundation
+
+* [x] Probe-compatible BiometricSample
+* [x] Identification Repository
+* [x] Identification Candidate Repository
+* [x] Biometric Engine Search Contract
+* [x] SearchResult and SearchCandidate
+* [x] Subject Lookup by ExternalSubjectId
+* [x] Subject Lookup by GalleryId
+* [x] ProcessIdentificationCommand
+* [x] ProcessIdentificationHandler
+* [x] Candidate Mapping Foundation
+
+## v0.5.0 - Identification API
 
 * [ ] Identification API
 * [ ] CreateIdentificationCommand
-* [ ] ProcessIdentificationHandler
-* [ ] Candidate Ranking
-* [ ] Score Calculation
+* [ ] CreateIdentificationHandler
+* [ ] CreateIdentificationResponse
+* [ ] Identification Request Endpoint
+* [ ] Candidate Result Endpoint
+* [ ] End-to-End Identification Flow
+* [ ] Candidate Ranking Validation
+* [ ] Score Calculation Refinement
 * [ ] Top-K Candidate Selection
-* [ ] Identification Engine Abstraction
 
-## v0.5.0 - Distributed Processing
+## v0.6.0 - Distributed Processing
 
 * [ ] Kafka Integration
 * [ ] Kafka Producers
@@ -51,7 +67,7 @@
 * [ ] Durable Messaging
 * [ ] Distributed Processing
 
-## v0.6.0 - Vector Search
+## v0.7.0 - Vector Search
 
 * [ ] Vector Database Integration
 * [ ] Qdrant or PGVector

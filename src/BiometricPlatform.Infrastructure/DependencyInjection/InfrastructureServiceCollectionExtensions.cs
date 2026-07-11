@@ -26,7 +26,7 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddScoped<IUnitOfWork>(sp =>
             sp.GetRequiredService<BiometricPlatformDbContext>());
-        
+
         services.AddScoped<IBiographicDataRepository, BiographicDataRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
@@ -38,7 +38,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IIdentificationRepository, IdentificationRepository>();
         services.AddScoped<IIdentificationCandidateRepository, IdentificationCandidateRepository>();
         services.AddScoped<IBiometricSubjectCatalog, BiometricSubjectCatalog>();
-        
+
         return services;
     }
 }

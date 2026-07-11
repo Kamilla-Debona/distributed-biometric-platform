@@ -12,7 +12,7 @@ public sealed class BiometricSampleConfiguration
         builder.ToTable("biometric_samples");
 
         builder.HasKey(sample => sample.Id);
-        
+
         builder.Property(sample => sample.Id)
             .HasColumnName("id");
 

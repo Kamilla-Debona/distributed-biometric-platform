@@ -28,7 +28,7 @@ public sealed class IdentificationConfiguration
             .HasColumnName("status")
             .HasConversion<string>()
             .IsRequired();
-        
+
         builder.Property(identification => identification.FailureReason)
             .HasColumnName("failure_reason")
             .HasMaxLength(500);

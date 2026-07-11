@@ -23,7 +23,7 @@ public sealed class BiometricSampleRepository : IBiometricSampleRepository
         return _dbContext.BiometricSamples
             .FirstOrDefaultAsync(x => x.EnrollmentId == enrollmentId, cancellationToken);
     }
-    
+
     public Task<BiometricSample?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken)

@@ -5,7 +5,7 @@ namespace BiometricPlatform.Application.Abstractions.Persistence;
 public interface ISubjectRepository
 {
     Task AddAsync(Subject subject, CancellationToken cancellationToken);
-    
+
     Task<Subject?> GetByExternalSubjectIdAsync(
         string externalSubjectId,
         CancellationToken cancellationToken);

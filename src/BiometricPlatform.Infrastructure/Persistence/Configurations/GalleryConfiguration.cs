@@ -12,7 +12,7 @@ public sealed class GalleryConfiguration
         builder.ToTable("galleries");
 
         builder.HasKey(gallery => gallery.Id);
-        
+
         builder.Property(gallery => gallery.Id)
             .HasColumnName("id");
 

@@ -16,7 +16,7 @@ public sealed class Identification : AggregateRoot
         ProbeSampleId = probeSampleId;
         Status = IdentificationStatus.Requested;
     }
-    
+
     public Guid GalleryId { get; private set; }
 
     public Guid ProbeSampleId { get; private set; }

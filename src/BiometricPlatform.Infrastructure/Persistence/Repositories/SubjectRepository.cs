@@ -23,7 +23,7 @@ public sealed class SubjectRepository
             subject,
             cancellationToken);
     }
-    
+
     public Task<Subject?> GetByExternalSubjectIdAsync(
         string externalSubjectId,
         CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ public sealed class SubjectRepository
                 x => x.ExternalSubjectId == externalSubjectId,
                 cancellationToken);
     }
-    
+
     public async Task<IReadOnlyCollection<Subject>> GetByGalleryIdAsync(
         Guid galleryId,
         CancellationToken cancellationToken)

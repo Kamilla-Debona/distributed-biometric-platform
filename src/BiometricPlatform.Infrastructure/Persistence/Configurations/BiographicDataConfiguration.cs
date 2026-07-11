@@ -12,7 +12,7 @@ public sealed class BiographicDataConfiguration
         builder.ToTable("biographic_data");
 
         builder.HasKey(biographicData => biographicData.Id);
-        
+
         builder.Property(biographicData => biographicData.Id)
             .HasColumnName("id");
 

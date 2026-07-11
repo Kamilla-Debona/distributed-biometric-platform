@@ -15,7 +15,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<ProcessEnrollmentHandler>();
         services.AddScoped<CreateIdentificationHandler>();
         services.AddScoped<GetIdentificationHandler>();
-        
+
 
         return services;
     }

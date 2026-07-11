@@ -6,4 +6,8 @@
     <Project Path="src/BiometricPlatform.Domain/BiometricPlatform.Domain.csproj" />
     <Project Path="src/BiometricPlatform.Infrastructure/BiometricPlatform.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BiometricPlatform.Domain.Tests/BiometricPlatform.Domain.Tests.csproj" />
+    <Project Path="tests/BiometricPlatform.Application.Tests/BiometricPlatform.Application.Tests.csproj" />
+  </Folder>
 </Solution>

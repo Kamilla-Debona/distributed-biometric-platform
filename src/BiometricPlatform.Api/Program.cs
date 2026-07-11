@@ -3,6 +3,8 @@ using BiometricPlatform.Application.DependencyInjection;
 using BiometricPlatform.Application.Enrollments.ProcessEnrollment;
 using BiometricPlatform.Application.Identifications.ProcessIdentification;
 using BiometricPlatform.Infrastructure.DependencyInjection;
+using BiometricPlatform.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +34,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BiometricPlatformDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {

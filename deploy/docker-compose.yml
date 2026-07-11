@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: biometric-platform-postgres
+    environment:
+      POSTGRES_DB: biometric_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d biometric_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: src/BiometricPlatform.Api/Dockerfile
+    container_name: biometric-platform-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Database: "Host=postgres;Port=5432;Database=biometric_platform;Username=postgres;Password=postgres"
+    ports:
+      - "8080:8080"
+    volumes:
+      - api_uploads:/app/uploads
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  api_uploads:
